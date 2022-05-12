@@ -3,9 +3,13 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
 
+import homeRouter from './routers/homeRouter.js';
+
 const app = express();
 app.use(cors());
 app.use(json());
+
+app.use(homeRouter);
 
 
 app.listen(process.env.PORT, () => {
