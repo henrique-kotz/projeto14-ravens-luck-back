@@ -1,4 +1,4 @@
-import { schemaSignUp, schemaSignIn } from'../schemas/schema.js';
+import { schemaSignUp, schemaSignIn } from'../schemas/authSchema.js';
 
 export async function validateSignUpData(req, res, next) {
     const { error } = schemaSignUp.validate(req.body, {abortEarly: false});
