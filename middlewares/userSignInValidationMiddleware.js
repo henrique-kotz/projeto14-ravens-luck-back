@@ -5,13 +5,9 @@ export async function validateSignInUser(req, res, next) {
     const { email, password } = req.body;
     try {
         const user = await db.collection('users').findOne({email})
-        if (!user) {
-            return res.status(401).send('Usuário não encontrado!');
+        if (!user || !bcrypt.compareSync(password, user.password)) {
+            return res.status(401).send('Usuário não existe!');
         } 
-        if (!bcrypt.compareSync(password, user.password)) {
-            return res.status(401).send('Senha inválida!');
-        }
-
     }catch(e) {
         res.sendStatus(500);
     }
