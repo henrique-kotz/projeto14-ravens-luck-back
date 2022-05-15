@@ -5,14 +5,15 @@ export async function getCart(req, res) {
 
     try {
         const { cart } = await db.collection('personal-data').findOne({ _id });
-        let total;
+        let total = 0;
 
         cart.forEach(book => {
             const value = book.price.replace(',', '.');
-            total =+ parseFloat(value);
+            total += parseFloat(value);
         });
+        const formattedTotal = '' + total.toFixed(2);
 
-        res.send({ cart, total });
+        res.send({ cart, total: formattedTotal });
     } catch(err) {
         console.log(err);
         res.sendStatus(500);
