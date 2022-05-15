@@ -8,6 +8,8 @@ export async function validateSignInUser(req, res, next) {
         if (!user || !bcrypt.compareSync(password, user.password)) {
             return res.status(401).send('Usuário não existe!');
         } 
+
+        res.locals.user = user;
     }catch(e) {
         res.sendStatus(500);
     }
