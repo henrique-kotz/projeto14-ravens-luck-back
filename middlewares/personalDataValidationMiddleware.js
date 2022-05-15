@@ -11,7 +11,7 @@ export async function validatePersonalData(req, res, next) {
             const response = await db.collection('personal-data').insertOne({
                 userId: user._id,
                 phone: "",
-                address: "",
+                address: {},
                 wishlist: [],
                 cart: [],
             });
