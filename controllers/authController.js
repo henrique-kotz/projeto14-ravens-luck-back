@@ -26,7 +26,7 @@ export async function postSignIn(req, res) {
     const { email, password } = req.body;
 
     try {
-        const user = await db.collection("users").findOne({email});
+        const { user } = res.locals;
         const session = await db.collection("sessions").findOne({userId: user._id});  
         if (session) {
             res.status(201).send({name: user.username, image: user.image, token: session.token});

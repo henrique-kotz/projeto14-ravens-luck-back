@@ -1,4 +1,5 @@
 import db from '../db.js';
+import { ObjectId } from 'mongodb';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -14,7 +15,7 @@ export async function validateToken(req, res, next) {
         const session = await db.collection('sessions').findOne({ token });
         if (!session) return res.sendStatus(401);
 
-        const user = await db.collection('users').findOne({ _id: userId });
+        const user = await db.collection('users').findOne({ _id: ObjectId(userId) });
         if (user) {
             res.locals.user = user;
         } else {
