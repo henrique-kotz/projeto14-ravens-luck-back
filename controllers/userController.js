@@ -14,7 +14,6 @@ export async function getCart(req, res) {
         const formattedTotal = '' + total.toFixed(2);
 
         res.send({ cart, total: formattedTotal });
-
     } catch(err) {
         console.log(err);
         res.sendStatus(500);
@@ -27,10 +26,28 @@ export async function addBookToCart(req, res) {
     try {
         const { _id, cart } = personalData;
         cart.push(req.body);
-        console.log(cart);
-        await db.collection('personal').updateOne({ _id },
+
+        await db.collection('personal-data').updateOne({ _id },
             {$set: { cart }});
         res.status(201).send('Livro adicionado ao carrinho!');
+    } catch(err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+}
+
+export async function removeBookFromCart(req, res) {
+    const { personalData } = res.locals;
+    const { book } = req.body;
+
+    try {
+        const { _id, cart } = personalData;
+        const index = cart.findIndex(elem => elem._id === book._id);
+        cart.splice(index, 1);
+
+        await db.collection('personal-data').updateOne({ _id },
+            {$set: { cart }});
+        res.status(200).send('Livro removido do carrinho!');
     } catch(err) {
         console.log(err);
         res.sendStatus(500);
@@ -43,6 +60,13 @@ export async function registerOrder(req, res) {
     const { _id, cart } = personalData;
 
     try {
+        let total = 0;
+
+        cart.forEach(book => {
+            const value = book.price.replace(',', '.');
+            total += parseFloat(value);
+        });
+
         await db.collection('personal-data').updateOne({ _id },
             {$set: { 
                 phone: body.phone,
@@ -51,7 +75,7 @@ export async function registerOrder(req, res) {
         await db.collection('orders').insertOne({
             userId: _id,
             address: body.address,
-            price: '',
+            price: total,
             cart,
         });
         await db.collection('personal-data').updateOne({ _id }, {$set: { cart: [] }});
