@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { getCart, addBookToCart, registerOrder } from '../controllers/userController.js';
+import { getCart, addBookToCart, removeBookFromCart, registerOrder } from '../controllers/userController.js';
 import { validateToken } from '../middlewares/tokenValidationMiddleware.js';
 import { validatePersonalData } from '../middlewares/personalDataValidationMiddleware.js';
 
@@ -10,6 +10,7 @@ userRouter.use(validatePersonalData);
 
 userRouter.get('/user/cart', getCart);
 userRouter.post('/user/cart', addBookToCart);
+userRouter.delete('/user/cart', removeBookFromCart);
 userRouter.post('/delivery', registerOrder);
 
 export default userRouter;
