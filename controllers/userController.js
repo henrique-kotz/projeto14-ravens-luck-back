@@ -1,4 +1,3 @@
-// import res from 'express/lib/response';
 import db from '../db.js';
 
 export async function getCart(req, res) {
@@ -56,8 +55,8 @@ export async function removeBookFromCart(req, res) {
 }
 
 export async function registerOrder(req, res) {
-    const { body } = req;
-    const { personalData } = res.locals;
+    const { phone, address } = req.body;
+    const { personalData, user } = res.locals;
     const { _id, cart } = personalData;
 
     try {
@@ -70,12 +69,12 @@ export async function registerOrder(req, res) {
 
         await db.collection('personal-data').updateOne({ _id },
             {$set: { 
-                phone: body.phone,
-                address: body.address,
+                phone,
+                address
             }});
         await db.collection('orders').insertOne({
-            userId: _id,
-            address: body.address,
+            userId: user._id,
+            address,
             price: total,
             cart,
         });
@@ -88,18 +87,14 @@ export async function registerOrder(req, res) {
 
 export async function getWishlist(req, res) {
     const { personalData } = res.locals;
-    res.status(201).send(personalData.wishlist)
-    console.log(personalData.wishlist)
+    res.status(201).send(personalData.wishlist);
 }
 
 export async function deleteBook(req, res){
     const { elem } = req.body;
-    console.log("body", elem)
     const { _id, wishlist } = res.locals.personalData;
 
     const newList = wishlist.filter(book => book._id !== elem._id);
-
-    console.log('wish', newList)
     try {
         await db.collection('personal-data').updateOne({ _id },
             {$set: { wishlist: newList }});
