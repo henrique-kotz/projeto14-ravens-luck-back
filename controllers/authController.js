@@ -24,7 +24,6 @@ export async function postSignUp(req, res) {
 
 export async function postSignIn(req, res) {
     const { email, password } = req.body;
-
     try {
         const { user } = res.locals;
         const session = await db.collection("sessions").findOne({userId: user._id});  
@@ -37,6 +36,6 @@ export async function postSignIn(req, res) {
             res.status(201).send({name: user.username, image: user.image, token});
         }  
     }catch(e) {
-        res.status(500).send("Não foi possível fazer o login!");
+        res.send(e);
     }
 }
