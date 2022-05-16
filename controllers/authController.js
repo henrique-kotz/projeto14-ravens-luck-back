@@ -23,7 +23,6 @@ export async function postSignUp(req, res) {
 }
 
 export async function postSignIn(req, res) {
-    const { email, password } = req.body;
     try {
         const { user } = res.locals;
         const session = await db.collection("sessions").findOne({userId: user._id});  
