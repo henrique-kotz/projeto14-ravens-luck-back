@@ -103,7 +103,7 @@ export async function deleteBook(req, res){
     try {
         await db.collection('personal-data').updateOne({ _id },
             {$set: { wishlist: newList }});
-        res.status(201).send('Livro retirado da lista!')
+        res.status(201).send('Livro retirado da lista!');
     }catch(e) {
         res.sendStatus(500);
     }

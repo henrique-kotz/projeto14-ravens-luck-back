@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import db from '../db.js';
 
 export async function selectBookmarkIcon(req, res, next) {
@@ -5,11 +6,11 @@ export async function selectBookmarkIcon(req, res, next) {
     const { personalData } = res.locals;
     const { wishlist, _id } = personalData;
 
-    const selectedBook = wishlist.filter((book) => book._id === elem._id);
+   const selectedBook = wishlist.filter((book) => book._id === elem._id);
     
     try {
         if (selectedBook.length !== 0) {
-            const index = wishlist.findIndex( book => book._id === elem._id);
+            const index = wishlist.findIndex( (book) => book._id === elem._id);
             wishlist.splice(index, 1);
             await db.collection('personal-data').updateOne({ _id },
                 {$set: { wishlist }});

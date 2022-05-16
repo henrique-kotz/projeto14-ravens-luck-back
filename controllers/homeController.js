@@ -22,7 +22,3 @@ export async function getOneBook(req, res) {
         res.sendStatus(500);
     }
 }
-
-export async function confirmRequest(req, res) {
-    res.status(200).send('Operação realizada com sucesso!');
-}
