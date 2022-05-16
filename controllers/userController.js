@@ -1,3 +1,4 @@
+// import res from 'express/lib/response';
 import db from '../db.js';
 
 export async function getCart(req, res) {
@@ -81,6 +82,29 @@ export async function registerOrder(req, res) {
         await db.collection('personal-data').updateOne({ _id }, {$set: { cart: [] }});
     }catch(e) {
         console.log(e);
+        res.sendStatus(500);
+    }
+}
+
+export async function getWishlist(req, res) {
+    const { personalData } = res.locals;
+    res.status(201).send(personalData.wishlist)
+    console.log(personalData.wishlist)
+}
+
+export async function deleteBook(req, res){
+    const { elem } = req.body;
+    console.log("body", elem)
+    const { _id, wishlist } = res.locals.personalData;
+
+    const newList = wishlist.filter(book => book._id !== elem._id);
+
+    console.log('wish', newList)
+    try {
+        await db.collection('personal-data').updateOne({ _id },
+            {$set: { wishlist: newList }});
+        res.status(201).send('Livro retirado da lista!');
+    }catch(e) {
         res.sendStatus(500);
     }
 }
