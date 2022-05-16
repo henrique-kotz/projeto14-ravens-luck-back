@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb';
 import db from '../db.js';
 
 export async function selectBookmarkIcon(req, res, next) {
